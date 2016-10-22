@@ -57,9 +57,9 @@ namespace DrugCase.Mongo.Demo
 
 
                 #region 查询
-                ////var query = new QueryDocument { { "CustomerName", "中科软3" } };
-                //var query = new QueryDocument { { "CustomerId", new ObjectId("9cc11fa2aa7f400aba9a0649") } };
-                //var list = CustomerHelper.Find(query);
+                //var query = new QueryDocument { { "CustomerName", "中科软3" } };
+                var query = new QueryDocument { { "CustomerId", new ObjectId("9cc11fa2aa7f400aba9a0649") } };
+                var list = CustomerHelper.Find(query);
                 #endregion
 
                 CustomerHelper.Delete(new ObjectId("7f10ea7d8abf4c0285620f49"));
