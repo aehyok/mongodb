@@ -18,10 +18,20 @@ namespace DrugCase.Mongo.Demo
 
         static void Main(string[] args)
         {
-            var server = ConfigurationManager.AppSettings["MongoDbServer"].ToString();
-            var client = new MongoClient(server);
-            var database = client.GetDatabase("aehyok");
-            var sss = database.GetCollection<user>("user").Find(x=>x.Name=="aehyok");
+
+            try
+            {
+                var server = ConfigurationManager.AppSettings["MongoDbServer"].ToString();
+
+                var client = new MongoClient(server);
+                var database = client.GetDatabase("aehyok");
+                var sss = database.GetCollection<user>("user").Find(x => x.Name == "aehyok");
+            }
+            catch (Exception e)
+            {
+                
+                throw;
+            }
         }
     }
 }
