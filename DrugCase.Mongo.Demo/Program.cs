@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Driver.GridFS;
 
 namespace DrugCase.Mongo.Demo
 {
@@ -15,7 +16,6 @@ namespace DrugCase.Mongo.Demo
     }
     class Program
     {
-
         static void Main(string[] args)
         {
             //初始化配置文件
@@ -63,6 +63,37 @@ namespace DrugCase.Mongo.Demo
                 #endregion
 
                 CustomerHelper.Delete(new ObjectId("7f10ea7d8abf4c0285620f49"));
+
+
+
+                MongoServerSettings mongoSetting = new MongoServerSettings();
+                mongoSetting.MaxConnectionPoolSize = 15000;//设定最大连接池
+                mongoSetting.WaitQueueSize = 500;//设定等待队列数
+                mongoSetting.Server = new MongoServerAddress("192.168.1.176", 27017);
+                int count = MongoServer.MaxServerCount;
+                MongoServer mongo=new MongoServer(mongoSetting);
+                
+                MongoDatabase dataBase = mongo.GetDatabase(ConfigHelper.DataBaseName);
+                MongoGridFSSettings fsSetting = new MongoGridFSSettings() { Root = "DocPdf" };
+
+                //实例化一个GridFS
+                MongoGridFS gridfs = new MongoGridFS(dataBase, fsSetting);
+
+                //将本地文件上传到mongoDB中去,以默认块的大小256KB对文件进行分块
+                //gridfs.Upload("100100.pdf", "Test.pdf");
+
+
+
+
+                //获取文件值
+                string moFileName = "Test.pdf";
+                //获取图片名
+                //通过文件名去数据库查值
+                MongoGridFS fs = new MongoGridFS(dataBase, fsSetting);
+                MongoGridFSFileInfo gfInfo = new MongoGridFSFileInfo(fs, moFileName);
+                //方法一，很简洁
+                string fileName = Guid.NewGuid().ToString() + ".pdf";
+                fs.Download(fileName, moFileName);
                 Console.ReadLine();
 
             }
